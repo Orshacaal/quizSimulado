@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado AWS Cloud Practitioner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #232F3E 0%, #FF9900 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .aws-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .aws-logo i {
+            color: #FF9900;
+            font-size: 2.5rem;
+        }
+        
+        .quiz-info {
+            background: #37475A;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-item i {
+            color: #FF9900;
+            font-size: 1.2rem;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin: 0 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #FF9900, #232F3E);
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease;
+        }
+        
+        .quiz-content {
+            padding: 30px;
+        }
+        
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question-number {
+            background: #232F3E;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .options {
+            list-style: none;
+            margin-bottom: 35px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        }
+        
+        .option:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option input[type="radio"] {
+            display: none;
+        }
+        
+        .option label {
+            display: block;
+            padding: 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+        
+        .option input[type="radio"]:checked + label {
+            background: #FF9900;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #eee;
+        }
+        
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #FF9900, #e6850e);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(230, 133, 14, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #232F3E;
+            color: white;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: #37475A;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(35, 47, 62, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results {
+            display: none;
+            text-align: center;
+            padding: 40px 30px;
+            animation: zoomIn 0.5s ease;
+        }
+        
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .results-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        
+        .results-icon.pass {
+            color: #28a745;
+        }
+        
+        .results-icon.fail {
+            color: #dc3545;
+        }
+        
+        .results h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #232F3E;
+        }
+        
+        .score-display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 25px 0;
+            background: linear-gradient(135deg, #FF9900, #232F3E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .result-message {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #2c3e50;
+        }
+        
+        .explanation {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border-left: 5px solid #FF9900;
+            text-align: left;
+        }
+        
+        .explanation h4 {
+            color: #232F3E;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .explanation p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #333;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer a {
+            color: #FF9900;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .aws-logo {
+                width: 50px;
+                height: 50px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .quiz-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+                padding: 15px;
+            }
+            
+            .info-item {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .quiz-content {
+                padding: 25px 20px;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .navigation {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="aws-logo">
+                <i class="fa-brands fa-aws"></i>
+            </div>
+            <h1>AWS Certified Cloud Practitioner</h1>
+            <p>Simulado CLF-C02 - Prepare-se para o exame de certificação oficial da Amazon Web Services</p>
+        </div>
+        
+        <div class="quiz-info">
+            <div class="info-item">
+                <i class="fa-solid fa-list-ol"></i>
+                <div>Questão: <span id="current-question">1</span> de <span id="total-questions">10</span></div>
+            </div>
+            <div class="info-item">
+                <i class="fa-solid fa-clock"></i>
+                <div class="timer" id="timer">90:00</div>
+            </div>
+            <div class="info-item">
+                <i class="fa-solid fa-star"></i>
+                <div>Pontuação: <span id="score">0</span>/10</div>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 10%"></div>
+        </div>
+        
+        <div class="quiz-content">
+            <div id="quiz-container"></div>
+            
+            <div class="results" id="results">
+                <div class="results-icon pass" id="result-icon">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2>Quiz Finalizado!</h2>
+                <div class="score-display" id="final-score">0/10</div>
+                <p class="result-message" id="result-message"></p>
+                <button class="btn btn-primary" onclick="restartQuiz()">
+                    <i class="fa-solid fa-rotate-right"></i> Refazer Quiz
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Desenvolvido para prática da certificação AWS Cloud Practitioner | Não afiliado à Amazon Web Services</p>
+            <p>Estude os serviços AWS em <a href="https://aws.amazon.com/" target="_blank">aws.amazon.com</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Array de perguntas para o simulado
+        const questions = [
+            {
+                question: "Qual é o principal benefício da computação em nuvem em termos de despesas de capital (CapEx)?",
+                options: [
+                    "A) Aumenta significativamente os custos iniciais de infraestrutura",
+                    "B) Converte despesas de capital em despesas operacionais",
+                    "C) Requer investimento antecipado em hardware físico",
+                    "D) Elimina completamente todos os custos operacionais"
+                ],
+                correct: 1,
+                explanation: "A computação em nuvem permite converter CapEx (despesas de capital) em OpEx (despesas operacionais), eliminando a necessidade de grandes investimentos iniciais em infraestrutura física."
+            },
+            {
+                question: "Qual serviço AWS é usado para armazenamento de objetos?",
+                options: [
+                    "A) Amazon EBS",
+                    "B) Amazon S3",
+                    "C) Amazon RDS",
+                    "D) Amazon DynamoDB"
+                ],
+                correct: 1,
+                explanation: "Amazon S3 (Simple Storage Service) é o serviço de armazenamento de objetos da AWS, oferecendo escalabilidade, alta disponibilidade e durabilidade de dados."
+            },
+            {
+                question: "Qual é o modelo de responsabilidade compartilhada na AWS?",
+                options: [
+                    "A) AWS é responsável por tudo, incluindo os dados do cliente",
+                    "B) O cliente é responsável por toda a infraestrutura física",
+                    "C) AWS cuida da segurança 'da' nuvem, cliente cuida da segurança 'na' nuvem",
+                    "D) Apenas o cliente é responsável pela segurança"
+                ],
+                correct: 2,
+                explanation: "No modelo de responsabilidade compartilhada, a AWS é responsável pela segurança DA nuvem (infraestrutura física), enquanto o cliente é responsável pela segurança NA nuvem (dados, aplicações, configurações e gerenciamento de acesso)."
+            },
+            {
+                question: "Qual serviço AWS fornece computação serverless?",
+                options: [
+                    "A) Amazon EC2",
+                    "B) Amazon Lambda",
+                    "C) Amazon ECS",
+                    "D) Amazon EKS"
+                ],
+                correct: 1,
+                explanation: "AWS Lambda é o serviço de computação serverless da AWS que executa código em resposta a eventos sem a necessidade de provisionar ou gerenciar servidores."
+            },
+            {
+                question: "O que significa RPO (Recovery Point Objective)?",
+                options: [
+                    "A) Tempo máximo aceitável para restaurar um sistema após um desastre",
+                    "B) Quantidade máxima de dados que pode ser perdida durante um incidente",
+                    "C) Número de backups necessários para garantir a continuidade",
+                    "D) Frequência mínima de teste de recuperação de desastres"
+                ],
+                correct: 1,
+                explanation: "RPO (Recovery Point Objective) define a quantidade máxima de dados que uma organização pode perder durante um incidente, medida em tempo (ex: não mais que 5 minutos de dados)."
+            },
+            {
+                question: "Qual serviço AWS é usado para criar redes privadas virtuais?",
+                options: [
+                    "A) Amazon Route 53",
+                    "B) Amazon VPC",
+                    "C) Amazon CloudFront",
+                    "D) AWS Direct Connect"
+                ],
+                correct: 1,
+                explanation: "Amazon VPC (Virtual Private Cloud) permite criar redes privadas virtuais isoladas na AWS, com controle completo sobre o ambiente de rede virtual."
+            },
+            {
+                question: "Qual é o benefício principal do Amazon CloudFront?",
+                options: [
+                    "A) Armazenamento de banco de dados gerenciado",
+                    "B) Computação de alto desempenho para HPC",
+                    "C) Distribuição de conteúdo com baixa latência global",
+                    "D) Monitoramento centralizado de recursos em nuvem"
+                ],
+                correct: 2,
+                explanation: "Amazon CloudFront é uma CDN (Content Delivery Network) que distribui conteúdo estático e dinâmico com baixa latência através de uma rede global de pontos de presença."
+            },
+            {
+                question: "Qual ferramenta AWS ajuda a estimar custos antes da implementação?",
+                options: [
+                    "A) AWS Cost Explorer",
+                    "B) AWS Pricing Calculator",
+                    "C) AWS Budgets",
+                    "D) AWS Billing Dashboard"
+                ],
+                correct: 1,
+                explanation: "O AWS Pricing Calculator permite estimar custos de serviços AWS antes da implementação, ajudando no planejamento orçamentário e comparação de arquiteturas."
+            },
+            {
+                question: "Qual serviço AWS é recomendado para aplicações que requerem consistência eventual?",
+                options: [
+                    "A) Amazon RDS",
+                    "B) Amazon DynamoDB",
+                    "C) Amazon Aurora",
+                    "D) Amazon Redshift"
+                ],
+                correct: 1,
+                explanation: "Amazon DynamoDB é um banco de dados NoSQL que oferece consistência eventual por padrão, sendo ideal para aplicações que podem tolerar leituras eventualmente consistentes para melhor desempenho."
+            },
+            {
+                question: "O que é AWS Organizations?",
+                options: [
+                    "A) Serviço de monitoramento de desempenho",
+                    "B) Ferramenta de gerenciamento centralizado de múltiplas contas AWS",
+                    "C) Serviço de backup e recuperação de desastres",
+                    "D) Plataforma de desenvolvimento de aplicações"
+                ],
+                correct: 1,
+                explanation: "AWS Organizations permite gerenciar centralmente múltiplas contas AWS, aplicando políticas de segurança e conformidade, além de consolidar faturamento."
+            }
+        ];
+
+        // Variáveis globais
+        let currentQuestion = 0;
+        let score = 0;
+        let timer;
+        let timeLeft = 90 * 60; // 90 minutos em segundos
+        let userAnswers = new Array(questions.length).fill(null);
+
+        // Inicialização do quiz
+        function initQuiz() {
+            document.getElementById('total-questions').textContent = questions.length;
+            updateTimerDisplay();
+            startTimer();
+            showQuestion();
+        }
+
+        // Mostrar questão atual
+        function showQuestion() {
+            const quizContainer = document.getElementById('quiz-container');
+            const question = questions[currentQuestion];
+            
+            quizContainer.innerHTML = `
+                <div class="question-container active">
+                    <div class="question-number">Questão ${currentQuestion + 1}</div>
+                    <div class="question-text">${question.question}</div>
+                    <ul class="options">
+                        ${question.options.map((option, index) => {
+                            let optionClass = 'option';
+                            if (userAnswers[currentQuestion] !== null) {
+                                if (index === question.correct) {
+                                    optionClass += ' correct';
+                                } else if (userAnswers[currentQuestion] === index) {
+                                    optionClass += ' incorrect';
+                                }
+                            }
+                            return `
+                                <li class="${optionClass}">
+                                    <input type="radio" id="option-${index}" name="option" value="${index}" 
+                                        ${userAnswers[currentQuestion] === index ? 'checked' : ''}
+                                        ${userAnswers[currentQuestion] !== null ? 'disabled' : ''}>
+                                    <label for="option-${index}">${option}</label>
+                                </li>
+                            `;
+                        }).join('')}
+                    </ul>
+                    
+                    ${userAnswers[currentQuestion] !== null ? `
+                        <div class="explanation">
+                            <h4><i class="fa-solid fa-lightbulb"></i> Explicação</h4>
+                            <p>${question.explanation}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="navigation">
+                        <button class="btn btn-secondary" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>
+                            <i class="fa-solid fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="btn btn-primary" onclick="nextQuestion()">
+                            ${currentQuestion === questions.length - 1 ? 'Finalizar <i class="fa-solid fa-flag-checkered"></i>' : 'Próxima <i class="fa-solid fa-arrow-right"></i>'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            updateProgress();
+        }
+
+        // Próxima questão
+        function nextQuestion() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            
+            if (selectedOption) {
+                userAnswers[currentQuestion] = parseInt(selectedOption.value);
+                
+                if (userAnswers[currentQuestion] === questions[currentQuestion].correct) {
+                    score++;
+                    document.getElementById('score').textContent = score;
+                }
+            } else if (userAnswers[currentQuestion] === null) {
+                // Se não selecionou e não havia resposta anterior, não avança
+                return;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        // Questão anterior
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        // Atualizar barra de progresso
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+        }
+
+        // Temporizador
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Finalizar quiz
+        function finishQuiz() {
+            clearInterval(timer);
+            
+            const quizContainer = document.getElementById('quiz-container');
+            const resultsContainer = document.getElementById('results');
+            const finalScore = document.getElementById('final-score');
+            const resultMessage = document.getElementById('result-message');
+            const resultIcon = document.getElementById('result-icon');
+            
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            
+            finalScore.textContent = `${score}/${questions.length}`;
+            
+            const percentage = (score / questions.length) * 100;
+            if (percentage >= 70) {
+                resultMessage.textContent = "Parabéns! Você atingiu a pontuação necessária para a certificação AWS Cloud Practitioner. Continue estudando para consolidar seu conhecimento e estar preparado para o exame oficial.";
+                resultIcon.className = "results-icon pass";
+                resultIcon.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+            } else {
+                resultMessage.textContent = "Continue estudando! Você ainda não atingiu a pontuação mínima recomendada para a certificação. Recomendamos revisar os conceitos fundamentais da AWS e praticar com mais simulados.";
+                resultIcon.className = "results-icon fail";
+                resultIcon.innerHTML = '<i class="fa-solid fa-graduation-cap"></i>';
+            }
+        }
+
+        // Reiniciar quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            timeLeft = 90 * 60;
+            userAnswers = new Array(questions.length).fill(null);
+            
+            document.getElementById('score').textContent = '0';
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            startTimer();
+            showQuestion();
+        }
+
+        // Iniciar o quiz quando a página carregar
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
